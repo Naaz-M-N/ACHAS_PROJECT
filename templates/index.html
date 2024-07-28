@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coral Health Assessment Website</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('static/background_img.jpg');  /* Update with your image path */
+            background-size: 100% 100%;
+            background-position: fixed;
+            background-repeat: no-repeat;
+            height: 3000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #ffffff;
+            text-align: center;
+        }
+        .upload-form {
+            margin-bottom: 20px;
+        }
+        #result {
+            display: none;
+        }
+        *{
+    margin:0;
+    padding:0;
+    font-family: sans-serif;
+}
+
+#healthResult
+{
+    margin-top: 0;
+}
+.banner{
+    width: 100%;
+    height:4000px;
+    background-image: linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),
+    url('img/background_img.jpg');
+    background-size: cover;
+    background-position: center;
+}
+.navbar{
+width: 85%;
+margin:auto;
+padding:35px 0;
+display: flex;
+align-items:center;
+justify-content:space-between;
+}
+.navbar ul li{
+    list-style:none;
+    display:inline-block;
+    margin:0 20px;
+    position: relative;
+}
+.navbar ul li a{
+    text-decoration: none;
+    color:#fff;
+    text-transform: uppercase;
+
+}
+.navbar ul li::after{
+    content: '';
+    height: 3px;
+    width: 0%;
+    background: #009688;
+    position: absolute;
+    left: 0;
+    bottom:-10px;
+    transition:0.5s;
+}
+.navbar ul li:hover::after{
+    width: 100%;
+
+}
+.content{
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    color: #fff;
+}
+.content h1{
+    font-size: 40px;
+    margin-top: 80px;
+}
+.content p{
+    font-size:medium;
+    margin: 10px auto;
+    font-weight: 100;
+    line-height: 30px;
+}
+button{
+    width: 200px;
+    padding:15px 0;
+    text-align: center;
+    margin: 20px 10;
+    border-radius: 25px;
+    font-weight: bold;
+    border: 2px solid #009688;
+    background:transparent;
+    color:#fff;
+    cursor:pointer;
+    position: relative;
+    overflow: hidden;
+}
+span{
+    background: #009688;
+    height: 100%;
+    width: 0;
+    border-radius: 25px;
+    position: absolute;
+    left: 0;
+    bottom:0;
+    z-index: -1;
+    transition: 0.5s;
+}
+button:hover span{
+    width: 100%;
+}
+button:hover{
+    border: none;
+}
+
+.file-upload-container {
+    display: flex;
+    align-items: center;
+}
+
+.file-input {
+    display: none;
+}
+
+.file-label {
+    padding: 10px 20px;
+    background-color: #ccc;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.file-label:hover {
+    background-color: #bbb;
+}
+
+.file-label.green {
+    background-color: green;
+    color: white;
+}
+
+.file-label.red {
+    background-color: red;
+    color: white;
+}
+
+
+.vertical-center {
+  margin: 120px;
+  position: relative;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+
+.identify-button, .health-detector-button {
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 2px solid #00bfa5;
+    color: #00bfa5;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.identify-button:hover, .health-detector-button:hover {
+    background-color: #00bfa5;
+    color: white;
+}
+
+
+
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <div class="navbar">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="corals.html" onclick="coral()">corals</a></li>
+                <li><a href="info_guide" onclick="info()">How to use</a></li>
+                <li><a href="about.html" onclick="about()">about</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <h1>
+                CORAL ASSESSMENT AND HEALTH CHECKER</h1>
+                <P>
+                   You can check the status of the corals health here!! <br>without diving deep into the sea.
+                </P><br>
+    <div class="vertical-center">
+        
+        <div class="file-upload-container">
+            <input type="file" id="fileInputIdentify" class="file-input" onchange="fileSelected('identify')">
+            &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; <label for="fileInputIdentify" class="file-label" id="fileLabelIdentify">Choose File</label>
+            <button type="button" id="identifyButton" onclick="identifyImage()"><span></span>Identify</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &emsp; &emsp; &emsp; &emsp; &emsp;
+            <div class="file-upload-container">
+                <input type="file" id="fileInputHealth" class="file-input" onchange="fileSelected('health')">
+                <label for="fileInputHealth" class="file-label" id="fileLabelHealth">Choose File</label>
+                <button type="button" id="healthDetectorButton" onclick="healthDetect()"><span></span>Health detector</button>
+            </div>
+        </div>
+    </div>
+    <div id="result"></div><br><br><br>
+    <div  id="healthResult"></div>
+
+<script>
+
+function fileSelected(type) {
+    if (type === 'identify') {
+        const fileInput = document.getElementById('fileInputIdentify');
+        const fileLabel = document.getElementById('fileLabelIdentify');
+        if (fileInput.files && fileInput.files.length > 0) {
+            fileLabel.classList.add('green');
+            fileLabel.textContent = 'File Selected';
+        }
+    } else if (type === 'health') {
+        const fileInput = document.getElementById('fileInputHealth');
+        const fileLabel = document.getElementById('fileLabelHealth');
+        if (fileInput.files && fileInput.files.length > 0) {
+            fileLabel.classList.add('green'); // Changed from 'red' to 'green'
+            fileLabel.textContent = 'File Selected';
+        }
+    }
+}
+        function identifyImage() {
+            let fileInput = document.getElementById('fileInputIdentify');
+            let file = fileInput.files[0];
+            if (file) {
+                let formData = new FormData();
+                formData.append('file', file);
+
+                fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    let resultDiv = document.getElementById('result');
+                    if (data.prediction) {
+                        resultDiv.style.display = 'block';
+                        resultDiv.innerHTML = `<p>Prediction: ${data.prediction}</p>`;
+                    } else {
+                        resultDiv.style.display = 'block';
+                        resultDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+                    }
+                })
+                .catch(error => {
+                    let resultDiv = document.getElementById('result');
+                    resultDiv.style.display = 'block';
+                    resultDiv.innerHTML = `<p>Error: ${error}</p>`;
+                });
+            } else {
+                alert('Please select an image to identify.');
+            }
+        }
+
+
+    function healthDetect() {
+    const fileInput = document.getElementById('fileInputHealth');
+    const file = fileInput.files[0];
+    if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        fetch('/health_detect', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                const healthResultDiv = document.getElementById('healthResult');
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    healthResultDiv.innerHTML = `
+                        <img src="${e.target.result}" alt="Coral Image" style="max-width: 100%; height: auto;">
+                        <p>Predicted: ${data.prediction} (${data.confidence.toFixed(2)})</p>
+                    `;
+                }
+                reader.readAsDataURL(file);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    } else {
+        alert('Please select a file first.');
+    }
+}
+    </script>
+</body>
+</html>
